@@ -1,6 +1,6 @@
 <?php
-include("config/config.php");
-include("config/dbconnection.php");
+require("config/config.php");
+require("config/dbconnection.php");
 
 
 function getAllUsers($db){

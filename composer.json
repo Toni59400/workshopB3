@@ -1,5 +1,6 @@
 {
-    "require": {
-        "phpoffice/phpexcel": "^1.8"
+    "require" : {
+        "ext-zip": "*",
+        "phpoffice/phpspreadsheet": "^1.29"
     }
 }
