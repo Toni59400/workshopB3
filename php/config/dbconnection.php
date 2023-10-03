@@ -5,5 +5,6 @@
     } catch (Exception $e) {
         echo 'ECHEC :'.$e->getMessage();
         $db = NULL; 
+        die;
     }
 ?>
