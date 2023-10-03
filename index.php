@@ -314,8 +314,8 @@ var_dump($usr);
                 <div class="row justify-content-center">
                     <div class="col-xl-6">
                         <div class="section-heading">
-                            <span>Perfect Team</span>
-                            <h3>Meet Our Agents</h3>
+                            <span>Les utilisateurs</span>
+                            <h3>! Rencontres les</h3>
                         </div>
                     </div>
                 </div><!--justify-content-center end-->
