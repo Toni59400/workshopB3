@@ -1,16 +1,15 @@
 <?php
-include("./config/config.php");
-include("./config/dbconnection.php");
+include("config/config.php");
+include("config/dbconnection.php");
 
 
-function getAllUsers(){
-    $sql = $db->prepare("SELECT * FROM users"); 
-    $sql = $sql->execute();
-    $data = $sql->fetchAll(); 
+function getAllUsers($db){
+    $sql = $db->query("SELECT * FROM users"); 
+    $data = $sql->fetchAll();
     return $data;
 }
 
-function getOneUsers($idUser){
+function getOneUsers($idUser, $db){
     //Return 1 user or erreur code
     if(is_int($id)){
         $sql = $db->query("SELECT * FROM users where id_users='$idUser'"); 
@@ -21,7 +20,7 @@ function getOneUsers($idUser){
     }
 }
 
-function updateUsers($idUser, $mail, $pass, $verif, $lastCo, $registerAt, $cp, $ville, $adress){
+function updateUsers($idUser, $mail, $pass, $verif, $lastCo, $registerAt, $cp, $ville, $adress, $db){
     if(is_int($id)){
         $passHash = password_hash($pass, PASSWORD_DEFAULT).
         $sql = $db->prepare("UPDATE users SET mail = '$mail',pass = '$passHash', ville = '$ville',cp = '$cp', adresse='$adress' WHERE id_users = 1;");
