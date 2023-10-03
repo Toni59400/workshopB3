@@ -2,5 +2,5 @@
     $config['server'] = 'localhost';
     $config['login'] = 'root';
     $config['password'] = '';
-    $config['dbname'] = 'workshop'; 
+    $config['dbname'] = 'workshopb3'; 
 ?>
