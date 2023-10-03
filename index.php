@@ -1,3 +1,8 @@
+<?php
+include("php/users.php");
+var_dump(getAllUsers());
+?>
+
 <!doctype html>
 <html class="no-js" lang="en">
 
