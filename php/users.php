@@ -20,6 +20,17 @@ function getOneUsers($idUser, $db){
     }
 }
 
+function getOneUsersByMail($mail, $db){
+    //Return 1 user or erreur code
+    if(is_string($mail)){
+        $sql = $db->query("SELECT * FROM users where mail='$mail'"); 
+        $data = $sql->fetch(); 
+        return $data;
+    } else {
+        return "Erreur Systeme";
+    }
+}
+
 function updateUsers($idUser, $mail, $pass, $verif, $lastCo, $registerAt, $cp, $ville, $adress, $db){
     if(is_int($id)){
         $passHash = password_hash($pass, PASSWORD_DEFAULT).
