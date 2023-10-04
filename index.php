@@ -2,13 +2,33 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-require('php/header.php');
-require("php/users.php");
-$usr = getAllUsers($db);
-var_dump($usr);
-
-
+include("php/config/config.php");
+include("php/config/dbconnection.php");
+include("php/users.php");
 ?>
+
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Accueil - CommunityExchange</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="shortcut icon" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/js/lib/slick/slick.css">
+    <link rel="stylesheet" href="assets/js/lib/slick/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/color.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+
+<body>
     <!--[if lte IE 9]>
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
   <![endif]-->
@@ -142,33 +162,47 @@ var_dump($usr);
                 <div class="row justify-content-center">
                     <div class="col-xl-6">
                         <div class="section-heading">
-                            <span>Discover</span>
-                            <h3>Popular Listing</h3>
+                            <span>Découvrez nos services</span>
+                            <h3>Les plus populaires</h3>
                         </div>
                     </div>
                 </div>
                 <div class="row">
+                    <?php  $data = $db->query("SELECT * FROM services inner join users on services.id_users = users.id_users inner join categorie on services.id_categorie = categorie.id_categorie LIMIT 3 OFFSET 1;")->fetchAll();
+
+                    foreach($data as $service){
+                        $id = $service["id_services"];
+                    $data2 = $db->query("SELECT * from avoirnote where avoirnote.id_services = $id")->fetchAll();
+                    $moy = 0;
+                    $cpt = 0;
+                    foreach($data2 as $note){
+                        $cpt = $cpt + 1;
+                        $idNote = $note["id_note"];
+                        $data3 = $db->query("SELECT * from note where id_note = $idNote")->fetch();
+                        $moy = $moy + $data3["valeur"];
+                    }
+
+                    $moy = $moy/$cpt;
+                    ?>
                     <div class="col-lg-4 col-md-6">
                         <div class="card">
-                            <a href="24_Property_Single.html" title="">
+                            <a href="" title="">
                                 <div class="img-block">
                                     <div class="overlay"></div>
-                                    <img src="https://via.placeholder.com/370x295" alt="" class="img-fluid">
+                                    <img src="/assets/images/service.png" alt="" class="img-fluid">
                                     <div class="rate-info">
-                                        <h5>$550.000</h5>
-                                        <span>For Rent</span>
+                                        <h5><?=$service['prix']?>€</h5>
+                                        <span><?=$service['nom_categorie']?></span>
                                     </div>
                                 </div>
                             </a>
                             <div class="card-body">
-                                <a href="24_Property_Single.html" title="">
-                                    <h3>Traditional Apartments</h3>
-                                    <p> <i class="la la-map-marker"></i>212 5th Ave, New York</p>
+                                <a href="" title="">
+                                    <h3><?=$service['nom']?></h3>
+                                    <p> <i class="la la-map-marker"></i><?=$service["adresse"]?>, <?=$service["cp"]?>  <?=$service["ville"]?></p>
                                 </a>
                                 <ul>
-                                    <li>3 Bathrooms</li>
-                                    <li>2 Beds</li>
-                                    <li>Area 555 Sq Ft</li>
+                                    <li><?php if($service["dispo"] == 1 ) {echo "Disponible";} else { echo "Indisponible";}?></li>
                                 </ul>
                             </div>
                             <div class="card-footer">
@@ -176,77 +210,15 @@ var_dump($usr);
                                     <i class="la la-heart-o"></i>
                                 </a>
                                 <a href="#" class="pull-right">
-                                    <i class="la la-calendar-check-o"></i> 25 Days Ago</a>
+                                    <i class=""><?=$moy?>/5</i>
+                                </a>
                             </div>
-                            <a href="24_Property_Single.html" title="" class="ext-link"></a>
+                            <a href="" title="" class="ext-link"></a>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                            <a href="24_Property_Single.html" title="">
-                                <div class="img-block">
-                                    <div class="overlay"></div>
-                                    <img src="https://via.placeholder.com/370x295" alt="" class="img-fluid">
-                                    <div class="rate-info">
-                                        <h5>$550.000</h5>
-                                        <span>For Rent</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="card-body">
-                                <a href="24_Property_Single.html" title="">
-                                    <h3>Traditional Apartments</h3>
-                                    <p><i class="la la-map-marker"></i>212 5th Ave, New York</p>
-                                </a>
-                                <ul>
-                                    <li>3 Bathrooms</li>
-                                    <li>2 Beds</li>
-                                    <li>Area 555 Sq Ft</li>
-                                </ul>
-                            </div>
-                            <div class="card-footer">
-                                <a href="#" class="pull-left">
-                                    <i class="la la-heart-o"></i>
-                                </a>
-                                <a href="#" class="pull-right">
-                                    <i class="la la-calendar-check-o"></i> 25 Days Ago</a>
-                            </div>
-                            <a href="24_Property_Single.html" title="" class="ext-link"></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                            <a href="24_Property_Single.html" title="">
-                                <div class="img-block">
-                                    <div class="overlay"></div>
-                                    <img src="https://via.placeholder.com/370x295" alt="" class="img-fluid">
-                                    <div class="rate-info">
-                                        <h5>$550.000</h5>
-                                        <span>For Rent</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="card-body">
-                                <a href="24_Property_Single.html" title="">
-                                    <h3>Traditional Apartments</h3>
-                                    <p><i class="la la-map-marker"></i>212 5th Ave, New York</p>
-                                </a>
-                                <ul>
-                                    <li>3 Bathrooms</li>
-                                    <li>2 Beds</li>
-                                    <li>Area 555 Sq Ft</li>
-                                </ul>
-                            </div>
-                            <div class="card-footer">
-                                <a href="#" class="pull-left">
-                                    <i class="la la-heart-o"></i>
-                                </a>
-                                <a href="#" class="pull-right">
-                                    <i class="la la-calendar-check-o"></i> 25 Days Ago</a>
-                            </div>
-                            <a href="24_Property_Single.html" title="" class="ext-link"></a>
-                        </div>
-                    </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </section>
@@ -314,8 +286,8 @@ var_dump($usr);
                 <div class="row justify-content-center">
                     <div class="col-xl-6">
                         <div class="section-heading">
-                            <span>Les utilisateurs</span>
-                            <h3>! Rencontres les</h3>
+                            <span>Perfect Team</span>
+                            <h3>Meet Our Agents</h3>
                         </div>
                     </div>
                 </div><!--justify-content-center end-->
@@ -529,7 +501,24 @@ var_dump($usr);
 
 
     </div><!--wrapper end-->
+    <?php
+        $data = $db->query("SELECT * FROM services s inner join users on s.id_users = users.id_users")->fetchAll();
+        foreach($data as $service){
+    ?>
 
+
+    <div class="card d-none" id="<?=$service['id_services']?>" style="position: absolute; right: 220px; top: 220px; z-index: 1000;">
+        <div class="card-body">
+            <h5 class="card-title"><?=$service["nom"]?></h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary"><?=$service["adresse"]?>, <?=$service["cp"]?>  <?=$service["ville"]?></h6>
+            <p class="card-text"><?=$service["prix"]?>€</p>
+            <p class="card-text">Les contacter : <?=$service["mail"]?></p>
+            <p style="cursor: pointer" class="btnRetour" id-retour="<?=$service['id_services']?>">Retour</p>
+        </div>
+    </div>
+    <?php
+        }
+    ?>
 
 <?php
     if(isset($_POST["btn_connect"])){
@@ -557,6 +546,7 @@ var_dump($usr);
 
     <!-- Maps -->
     <script>
+
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(function(position) {
             var latitude = position.coords.latitude;
@@ -574,7 +564,10 @@ var_dump($usr);
                     data.forEach(item => {
                         var marker = L.marker([item.latitude, item.longitude]).addTo(map);
                         marker.on('click', () => {
-                            alert(item.nom + " : " + item.prix + "€")
+                            item = document.getElementById(item.id_services);
+                            item.classList.remove("d-none");
+                            item.classList.add("d-block");
+                            
                         });
                     });
             })
@@ -582,7 +575,25 @@ var_dump($usr);
                     console.error('Erreur lors de la récupération des données :', error);
             });
     });
-}
+}   
+
+    btn = document.getElementsByClassName("btnRetour");
+    for(let bouton of btn){
+    bouton.addEventListener('click', function(){
+        var id = this.getAttribute("id-retour");
+        hideBtn(id);
+    }, false);
+    }
+
+    function hideBtn(id){
+        var element = document.getElementById(id);
+        if (element) {
+            element.classList.add("d-none");
+            element.classList.remove("d-block");
+            
+        }
+    }
+
     
     </script>
 
